@@ -22,12 +22,12 @@
   </ul>
   {% if user.is_authenticated %}
     {% if user in car.drivers.all %}
-      <form method="post" action="{% url 'taxi:remove-me-from-car' car.id %}">
+      <form method="post" action="{% url 'taxi:remove-me' car.id %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-warning">Delete me from this car</button>
       </form>
     {% else %}
-      <form method="post" action="{% url 'taxi:add-me-to-car' car.id %}">
+      <form method="post" action="{% url 'taxi:add-me' car.id %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-success">Assign me to this car</button>
       </form>

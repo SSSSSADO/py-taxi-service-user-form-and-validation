@@ -1,8 +1,26 @@
 import re
 
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 
 from taxi.models import Driver, Car
+
+
+class DriverCreationForm(UserCreationForm):
+    class Meta:
+        model = Driver
+        fields = ("username", "license_number", "first_name", "last_name", "email")
+    def clean_license_number(self):
+        license_number = self.cleaned_data.get("license_number")
+        if not license_number:
+            raise forms.ValidationError("Введите номер лицензии.")
+        if len(license_number) != 8:
+            raise forms.ValidationError("Номер лицензии должен содержать ровно 8 символов.")
+        if not re.match(r"^[A-Z]{3}\d{5}$", license_number):
+            raise forms.ValidationError(
+                "Лицензия должна начинаться с 3 заглавных букв и заканчиваться 5 цифрами."
+            )
+        return license_number
 
 
 class DriverLicenseUpdateForm(forms.ModelForm):
